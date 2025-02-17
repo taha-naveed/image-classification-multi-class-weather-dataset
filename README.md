@@ -14,11 +14,10 @@ The Multi-class Weather Dataset (MWD) consists of images labeled into different 
 
 The dataset contains a balanced number of images across each weather category, allowing for an unbiased training and evaluation process. The distribution of images per category is as follows:
 
-- **Sunny:** X images
+- **Sunrise:** X images
 - **Cloudy:** Y images
 - **Rainy:** Z images
-- **Snowy:** A images
-- **Foggy:** B images
+- **Shine:** A images
 
 ## Data Preprocessing
 
