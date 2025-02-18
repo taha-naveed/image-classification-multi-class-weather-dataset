@@ -1,67 +1,78 @@
-# Image Classification using the Multi-class Weather Dataset
+# Weather Image Classification Project
 
-**Author:** Taha Naveed Shiblu
+Welcome to my Weather Image Classification project repository! In this project, I developed an end-to-end deep learning solution to classify images based on different weather conditions. The project explores various model architectures to capture nuances in weather images, particularly addressing the challenge of distinguishing between similar conditions such as "sunrise" and "shine."
 
-## Introduction
+---
 
-This README provides an overview of the image classification project using the Multi-class Weather Dataset (MWD). The primary objective of this project is to develop and evaluate machine learning models capable of accurately classifying images into various weather scenarios. The MWD is a widely-used dataset that provides labeled images for different weather conditions, making it a suitable choice for practicing image classification techniques.
+## Table of Contents
 
-## Dataset Overview
+- [Project Overview](#project-overview)
+- [Models Overview](#models-overview)
+  - [1. Fully Connected Classifier](#1-fully-connected-classifier)
+  - [2. Tuned Multi-Layer Neural Network with Dropout](#2-tuned-multi-layer-neural-network-with-dropout)
+  - [3. Convolutional Neural Network (CNN)](#3-convolutional-neural-network-cnn)
+  - [4. Transfer Learning with Pretrained MobileNet](#4-transfer-learning-with-pretrained-mobilenet)
+  - [5. Fine-Tuned MobileNet with Dynamic Learning Rate (Most Recent)](#5-fine-tuned-mobilenet-with-dynamic-learning-rate-most-recent)
+- [Training Details](#training-details)
+- [Usage](#usage)
+- [Acknowledgements](#acknowledgements)
 
-The Multi-class Weather Dataset (MWD) consists of images labeled into different weather categories, such as sunny, cloudy, rainy, snowy, and foggy. The dataset was sourced from [Mendeley Data](https://data.mendeley.com/datasets/4drtyfjtfy/1), and is widely used for educational purposes in computer vision and machine learning.
+---
 
-### Data Distribution
+## Project Overview
 
-The dataset contains a balanced number of images across each weather category, allowing for an unbiased training and evaluation process. The distribution of images per category is as follows:
+The goal of this project was to classify images of various weather conditions using deep learning. I experimented with five different models to identify the best approach for handling the multi-class classification task. The project uses categorical cross-entropy loss given the multi-class nature of the problem and incorporates early stopping to avoid overfitting.
 
-- **Sunrise:** X images
-- **Cloudy:** Y images
-- **Rainy:** Z images
-- **Shine:** A images
+---
 
-## Data Preprocessing
+## Models Overview
 
-To prepare the data for model training, several preprocessing steps were performed:
+### 1. Fully Connected Classifier
 
-1. **Resizing**: All images were resized to a uniform size of 128x128 pixels to ensure consistency in input dimensions for the model.
-2. **Normalization**: Pixel values were normalized to a range of [0, 1] to facilitate faster and more stable training of the neural network.
-3. **Data Augmentation**: Techniques such as rotation, flipping, zooming, and shifting were applied to artificially increase the size of the training dataset and enhance the model's ability to generalize to unseen data.
+- **Description:** A simple neural network built using Keras' Sequential API.
+- **Architecture:** Consists of a flatten layer and a Dense layer with softmax activation.
+- **Optimizer:** RMSprop.
+- **Purpose:** Served as a baseline model to quickly assess performance on weather image classification.
 
-## Model Training
+### 2. Tuned Multi-Layer Neural Network with Dropout
 
-For the classification task, a Convolutional Neural Network (CNN) was selected due to its proven effectiveness in image recognition tasks. The model architecture included:
+- **Description:** A more complex model that includes multiple hidden layers with dropout for regularization.
+- **Enhancements:** Utilized Keras Tuner with Bayesian Optimization to fine-tune hyperparameters such as learning rate, number of hidden layers, and dropout rate.
+- **Purpose:** Improved performance over the baseline by reducing overfitting and optimizing network complexity.
 
-- **Input Layer**: Accepts input images of size 128x128x3.
-- **Convolutional Layers**: Multiple convolutional layers with ReLU activation functions and max-pooling layers to down-sample the feature maps.
-- **Fully Connected Layers**: Dense layers to learn complex patterns and relationships between features.
-- **Output Layer**: A softmax layer to output the probability distribution over the weather categories.
+### 3. Convolutional Neural Network (CNN)
 
-### Hyperparameter Tuning
+- **Description:** A deep CNN designed to extract spatial features from weather images.
+- **Architecture:** Contains three Conv2D layers each followed by MaxPooling2D layers, then a Flatten layer, and a Dense softmax classifier.
+- **Optimizer:** Adam.
+- **Purpose:** Leverages convolutional layers to capture local spatial patterns in images, enhancing classification accuracy.
 
-Several hyperparameters, such as learning rate, batch size, and the number of epochs, were tuned to optimize the model's performance. A grid search approach was used to find the optimal combination of these parameters.
+### 4. Transfer Learning with Pretrained MobileNet
 
-## Model Evaluation
+- **Description:** A model that fine-tunes a MobileNet model pretrained on ImageNet.
+- **Approach:** Used MobileNet as a feature extractor and added a Dense softmax classification layer.
+- **Purpose:** Improved accuracy by leveraging learned features from a large-scale dataset, providing a solid starting point for weather image classification.
 
-The model was evaluated using a separate validation dataset to ensure unbiased assessment. The following metrics were used to evaluate model performance:
+### 5. Fine-Tuned MobileNet with Dynamic Learning Rate (Most Recent)
 
-- **Accuracy**: The percentage of correctly classified images.
-- **Precision**: The ability of the model to return only relevant instances.
-- **Recall**: The ability of the model to find all relevant instances.
-- **F1 Score**: The harmonic mean of precision and recall, providing a balance between the two.
+- **Description:** An enhanced version of the transfer learning model.
+- **Enhancements:** Uses a dynamic learning rate schedule instead of a fixed rate, coupled with the SGD optimizer with momentum.
+- **Purpose:** Specifically addresses the challenge of distinguishing between similar weather conditions (e.g., sunrise vs. shine) by allowing the model to adapt more effectively to the nuances of the dataset.
 
-Cross-validation was also employed to further validate the model's robustness and ensure it generalizes well to new data.
+---
 
-## Results and Discussion
+## Training Details
 
-The CNN model achieved an accuracy of XX% on the validation dataset. Key findings from the evaluation include:
+- **Loss Function:** Categorical Cross-Entropy.
+- **Early Stopping:** Implemented to prevent overfitting by monitoring validation loss.
+- **Optimization:** Different optimizers were used based on model architecture (RMSprop for the fully connected model, Adam for the CNN and first MobileNet model, and SGD with momentum for the fine-tuned MobileNet).
+- **Hyperparameter Tuning:** Keras Tuner (Bayesian Optimization) was employed for one of the models to optimize network architecture and training parameters.
 
-- **High Accuracy in Sunny and Cloudy Categories**: The model performed exceptionally well in identifying sunny and cloudy weather conditions, with precision and recall values above YY%.
-- **Moderate Performance in Rainy and Snowy Categories**: Performance in these categories was moderate, suggesting a need for further fine-tuning or additional data augmentation.
-- **Challenges with Foggy Conditions**: The model struggled with foggy images, indicating that these might require more specialized preprocessing or a different model architecture.
+---
 
-Visualizations such as confusion matrices and ROC curves were generated to provide a more in-depth understanding of the model's performance across different categories.
+## Usage
 
-## Conclusion
-
-This project successfully demonstrated the use of a CNN for classifying weather conditions from images. While the model showed strong performance in most categories, there is room for improvement, particularly in distinguishing foggy conditions. Future work could explore the use of more advanced architectures, such as transfer learning or ensemble methods, to enhance model performance further.
-
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/your_username/weather-image-classification.git
+   cd weather-image-classification
